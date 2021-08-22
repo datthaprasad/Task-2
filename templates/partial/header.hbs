@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+
+li a:active{
+  background-color: blue;
+}
+
+li a:visited{
+  background-color: blueviolet;
+}
+
+
+
+</style>
+   
+
+</head>
+<body >
+
+    <ul class="nav">
+      {{#if user.name}}
+        <li><a href="/">Home</a></li>
+        <li ><a href='/logout'>Logout</a></li>
+      {{else}}
+        <li ><a onclick="document.getElementById('id02').style.display='block'" href="#">Login</a></li>
+        <li onclick="document.getElementById('id01').style.display='block'"><a href="#"> Sign Up</a></li>
+      {{/if}}
+      
+      
+      
+</ul>
+
+
+
+</body>
+</html>
+
+
+
+
+
