@@ -26,7 +26,6 @@ router.post('/signup',auth,async (req,res)=>{
             errorMessage(e,res);
     }
 
-    
 })
 
 router.get('/login',async (req,res)=>{

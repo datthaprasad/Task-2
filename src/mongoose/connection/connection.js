@@ -12,4 +12,5 @@ mongoose.connect('mongodb://127.0.0.1/management-system',
         console.log("error"+e);
 });
 
+
 module.exports=mongoose;
