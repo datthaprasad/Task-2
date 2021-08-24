@@ -3,10 +3,7 @@ const User=require('../mongoose/models/user');
 
 const auth=async (req,res,next)=>{
     try{
-    console.log(req.cookies.authToken);
-    
     const verify=jwt.verify(req.cookies.authToken,'task');
-    console.log(verify);
     const user=await User.findOne({_id:verify._id,'tokens.token':req.cookies.authToken})
 
     if(!user)

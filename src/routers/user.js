@@ -5,7 +5,7 @@ const auth=require('../middleware/auth')
 const errorMessage=require('../utils/errorMessage')
 const router=new express.Router();
 
-router.post('/signup',auth,async (req,res)=>{
+router.post('/signup',async (req,res)=>{
 
     if(req.body.password!=req.body.cpassword)
         return res.send("Passwords are not matching")
@@ -13,17 +13,17 @@ router.post('/signup',auth,async (req,res)=>{
     try{
         const user = new User(req.body)
         const token = await user.generateAuthToken();
-        res.cookie(`authToken`,token,{
+        await res.cookie(`authToken`,token,{
             maxAge: 30*24*60*60*1000,//to store 30 days
             secure: true,
             httpOnly: true,
             sameSite: 'lax'
         });
 
-        res.status(201).send({ user})
+        res.status(201).redirect('/')
     }
     catch(e){
-            errorMessage(e,res);
+            errorMessage(e,res,"Signup Failed");
     }
 
 })
@@ -41,8 +41,8 @@ router.get('/login',async (req,res)=>{
             sameSite: 'lax'
         });
         // res.send({user})
-        
-        res.render('home',{user})
+        res.redirect('/')
+        // res.render('home',{user})
     } catch (e) {
         res.status(400).send(String(e).split(": ")[1])
         // errorMessage(e,res,"Login Failed")
@@ -61,12 +61,38 @@ router.get('/logout',auth,async (req,res)=>{
     }
 })
 
-// router.get('/',auth,(req,res)=>{
-//     console.log(req.user);
-//     res.render('home',{
-//         name:req.user.name
-//     })
-// })
+router.get('/logout/all',auth,async (req,res)=>{
+    try{
+        req.user.tokens=[];
+        req.user.save();
+        res.clearCookie();
+        res.redirect('/')
+    }
+    catch(e){
+        res.status(400).send(e)
+    }
+})
 
+router.post('/edit',auth,async (req,res)=>{
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['name', 'email', 'password', 'gender','phone','age']
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!' })
+    }
+
+    try {
+        updates.forEach((update) => {
+            if(req.body[update])
+            req.user[update] = req.body[update]
+        })
+        await req.user.save()
+        res.redirect('/')
+    } catch (e) {
+        console.log(e);
+        errorMessage(e,res,"EDiting profile failed")
+    }
+})
 
 module.exports=router;

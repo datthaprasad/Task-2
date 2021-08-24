@@ -111,12 +111,6 @@ userSchema.methods.toJSON = function () {
 
 
 
-// userSchema.pre('remove', async function (next) {
-//     const user = this
-//     await Task.deleteMany({ author: user._id })
-//     next()
-// })
-
 userSchema.pre("save",async function (){
     const user=this;
     if(user.isModified('password')){
