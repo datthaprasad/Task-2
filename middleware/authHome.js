@@ -1,5 +1,5 @@
 const jwt=require('jsonwebtoken')
-const User=require('../mongoose/models/user');
+const User=require('../models/user');
 
 const authHome=async (req,res,next)=>{
     try{

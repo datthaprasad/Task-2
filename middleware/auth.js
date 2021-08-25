@@ -1,5 +1,5 @@
 const jwt=require('jsonwebtoken')
-const User=require('../mongoose/models/user');
+const User=require('../models/user');
 
 const auth=async (req,res,next)=>{
     try{
@@ -14,7 +14,7 @@ const auth=async (req,res,next)=>{
     next();
     }
     catch(e){
-        res.status(401).send("Please create or login to account "+e)
+        res.status(401).send("Please create or login to account ")
     }
 }
 

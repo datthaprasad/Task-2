@@ -1,8 +1,8 @@
 const express=require('express');
 
-const User=require('../mongoose/models/user')
+const User=require('../models/user')
 const auth=require('../middleware/auth')
-const errorMessage=require('../utils/errorMessage')
+const errorMessage=require('../helper/errorHelper')
 const router=new express.Router();
 
 router.get('/users:id',auth,async (req,res)=>{

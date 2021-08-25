@@ -1,69 +1,41 @@
 const mongoose=require('mongoose');
-const validator=require('validator')
 const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
+
 
 
 const userSchema=new mongoose.Schema({
     name:{
         type:String,
-        required:true,
-        validate(value){
-            if(!String(value).match(/^[a-zA-Z_]+$/))
-                throw new Error("Username must have only alphabets and _")
-        }
+        required:true,     
     },
     phone:{
         type:Number,
         required:true,
-        validate(value){
-            if(!validator.isMobilePhone(String(value),"en-IN"))
-                throw new Error("Mobile is not valid");
-        }
     },
     email:{
         type:String,
         unique:true,
         required:true,
         lowercase:true,
-        validate(value){
-            if(!validator.isEmail(value))
-                throw new Error("Email is invalid");
-        }
     },
     password:{
         type:String,
         required:true,
-        validate(value){
-            if(!validator.isStrongPassword(value))
-                throw new Error("Password is not strong (use Uppercase, Lowercase, Symble, Integer and minimum length of 8")
-        }
     },
     gender:{
         type:String,
         lowercase:true,
         required:true,
-        validate(value){
-            if(value!="male"&&value!="female"&&value!="other")
-                throw new Error("gender is invalid")
-        }
     },
     age:{
         type:Number,
         required:true,
-        validate(value){
-            if(value<0)
-                throw new Error("Age is invalid")
-        }
     },
     role:{
         type:String,
         default:'user',
         lowercase:true,
-        validate(value){
-            if(value!="student"&&value!="teacher"&&value!="admin"&&value!="user")
-                throw new Error("Role is invalid")
-        }
     },
     tokens:[{
         token:{
@@ -91,7 +63,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.methods.generateAuthToken=async function(){
     const user = this
-    const token = jwt.sign({ _id: user._id.toString() }, 'task')
+    const token = jwt.sign({ _id: user._id.toString() }, 'task',{expiresIn:"30d"})
 
     user.tokens = user.tokens.concat({ token })
     await user.save()
