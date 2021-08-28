@@ -2,10 +2,12 @@ const express=require('express');
 
 const User=require('../models/user')
 const auth=require('../middleware/auth')
-const errorMessage=require('../helper/errorHelper')
 const router=new express.Router();
 
 router.get('/users:id',auth,async (req,res)=>{
+
+    if(!req.user.name)
+    return res.status(400).send('please login or create account')
     if(req.user.role!='admin')
         return res.status(500).send("you are not ADMIN, Sorry")
 
@@ -19,6 +21,9 @@ router.get('/users:id',auth,async (req,res)=>{
 
 router.get('/assignRole:id:role',auth,async (req,res)=>{
     try{
+
+        if(!req.user.name)
+            return res.status(400).send('please login or create account')
         if(req.user.role!='admin')
             return res.status(500).send("you are not ADMIN, Sorry");
         

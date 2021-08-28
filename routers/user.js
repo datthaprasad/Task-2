@@ -10,7 +10,7 @@ const router=new express.Router();
 
 router.post('/signup',async (req,res)=>{
     try{
-    validateInput(req,res);
+    if(validateInput(req,res)!=1) return;
 
     if(req.body.password!=req.body.confirm_password)
         return res.send("Passwords are not matching")
@@ -46,10 +46,8 @@ router.get('/login',async (req,res)=>{
             httpOnly: true,
             sameSite: 'lax'
         });
-        debugger
-        // res.send({user})
         res.redirect('/')
-        // res.render('home',{user})
+
     } catch (e) {
         res.status(400).send(String(e).split(": ")[1])
         // errorMessage(e,res,"Login Failed")
@@ -58,10 +56,12 @@ router.get('/login',async (req,res)=>{
 
 router.get('/logout',auth,async (req,res)=>{
     try{
+        if(!req.user.name)
+            return res.status(400).send('please login or create account')
         req.user.tokens=req.user.tokens.filter((token)=>req.token!=token.token);
         req.user.save();
         res.clearCookie();
-        res.render('home')
+        res.redirect('/');
         
     }
     catch(e){
@@ -71,6 +71,8 @@ router.get('/logout',auth,async (req,res)=>{
 
 router.get('/logout/all',auth,async (req,res)=>{
     try{
+        if(!req.user.name)
+            return res.status(400).send('please login or create account')
         req.user.tokens=[];
         req.user.save();
         res.clearCookie();
@@ -82,8 +84,11 @@ router.get('/logout/all',auth,async (req,res)=>{
 })
 
 router.post('/edit',auth,async (req,res)=>{
+
+    if(!req.user.name)
+        return res.status(400).send('please login or create account')
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'email', 'password', 'gender','phone','age','confirm_password']
+    const allowedUpdates = ['userName','name', 'email', 'password', 'gender','phone','age','confirm_password']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
@@ -99,11 +104,8 @@ router.post('/edit',auth,async (req,res)=>{
             req.user[update] = req.body[update]
         })
         await req.user.save()
-        res.render('home',{
-            user:req.user,
-            admin:req.user.role==="admin"?true:false
         
-        });
+        res.redirect('/')
     } catch (e) {
         console.log(e);
         errorMessage(e,res,"EDiting profile failed")
@@ -112,6 +114,9 @@ router.post('/edit',auth,async (req,res)=>{
 
 
 router.post('/reset',auth,async (req,res)=>{
+
+    if(!req.user.name)
+    return res.status(400).send('please login or create account')
     if(req.body.password!=req.body.confirm_password)
         return res.status(400).send("Passwords are not matching")
     else{
@@ -130,7 +135,8 @@ router.post('/reset',auth,async (req,res)=>{
 })
 
 
-router.post('/forgot_password',async (req,res)=>{
+router.post('/forgotPassword',async (req,res)=>{
+
     const updates = Object.keys(req.body)
     console.log(updates);
     const allowedUpdates = ['name', 'email', 'password','confirm_password']
@@ -161,7 +167,7 @@ router.post('/forgot_password',async (req,res)=>{
         });
         }
         else{
-            return res.status(400).send("wrong user name")
+            return res.status(400).send("wrong name")
         }
         res.redirect('/')
     } catch (e) {

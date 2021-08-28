@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/templates/css/styles.css">
+    </head>
+    <body>
+      <div id="id01" class="modal">
+            <span onclick=location.href='/' class="close" title="Close Modal">&times;</span>
+            <form class="modal-content" action="/signup" method="POST">
+              <div class="container">
+                <h1>Sign Up</h1>
+                <p>Please fill in this form to create an account.</p>
+                <hr>
+                <label for="Name"><b>Full Name</b></label>
+                <input type="text" placeholder="Enter Name" name="name" required>
+
+                <label for="Name"><b>User Name</b></label>
+                <input type="text" placeholder="Enter Name" name="userName" required>
+
+                <label for="email"><b>Phone</b></label>
+                <input type="text" placeholder="Enter Phone" name="phone" required>
+
+                <label for="email"><b>Age</b></label>
+                <input type="text" placeholder="Enter Your Age" name="age" required>
+
+                <label for="gender">Choose your gender:</label>
+                  <select name="gender" required>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                  </select>
+                  <br>
+
+                <label for="email"><b>Email</b></label>
+                <input type="text" placeholder="Enter Email" name="email" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required onclick="myFunction3()" id="psw3">
+                <input type="checkbox" id="checkbox3" onclick="myFunction3()">Show Password
+
+                <label for="psw-repeat"><b>Repeat Password</b></label>
+                <input type="password" placeholder="Repeat Password" name="confirm_password" required id="psw4" onclick="myFunction4()">
+                <input type="checkbox" id="checkbox4" onclick="myFunction4()">Show Password
+
+                <div class="clearfix">
+                  <button type="submit" class="signupbtn">Sign Up</button>
+                  <button type="button" onclick=location.href='/' class="cancelbtn">Cancel</button>
+                  
+                </div>
+            </div>
+          </form>
+        </div>
+    <script>
+
+      var modal = document.getElementById('id01');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+
+         function myFunction3() {
+          var x = document.getElementById("psw3");
+          var y = document.getElementById("checkbox3");
+          if ( y.checked) {
+            x.type = "text";
+            console.log(y.checked)
+          } else {
+            x.type = "password";
+          }
+        } 
+
+         function myFunction4() {
+          var x = document.getElementById("psw4");
+          var y = document.getElementById("checkbox4");
+          if ( y.checked) {
+            x.type = "text";
+            console.log(y.checked)
+          } else {
+            x.type = "password";
+          }
+        } 
+    </script>
+
+    </body>
+</html>

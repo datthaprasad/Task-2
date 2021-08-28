@@ -1,9 +1,10 @@
 const jwt=require('jsonwebtoken')
 const User=require('../models/user');
+const {SECRET}=require('../config/setting')
 
 const auth=async (req,res,next)=>{
     try{
-    const verify=jwt.verify(req.cookies.authToken,'task');
+    const verify=jwt.verify(req.cookies.authToken,SECRET);
     const user=await User.findOne({_id:verify._id,'tokens.token':req.cookies.authToken})
 
     if(!user)
@@ -14,7 +15,9 @@ const auth=async (req,res,next)=>{
     next();
     }
     catch(e){
-        res.status(401).send("Please create or login to account ")
+        // res.status(401).send("Please create or login to account ")//
+        req.user={};
+        next();
     }
 }
 

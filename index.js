@@ -1,13 +1,12 @@
-const authHome=require('./middleware/authHome')
+const auth=require('./middleware/auth')
 const userRouter=require('./routers/user')
 const adminRouter=require('./routers/admin')
-const databseConnect=require('./config/setting')
+require('./models/connectDatabase')
 
 const hbs=require('hbs')
 const bp=require('body-parser')
 const express=require('express');
 const CP=require('cookie-parser');
-const bcrypt=require('bcryptjs')
 
 const app=express();
 app.use(express.json())
@@ -20,19 +19,17 @@ app.use(userRouter)
 app.use(adminRouter)
 
 app.set('view engine','hbs');
+
 app.set('views',__dirname+'/templates/views')
 hbs.registerPartials(__dirname+'/templates/partial')
 
 
 
-app.get('/',authHome,async (req,res)=>{
-    if(req.user)
+app.get('/',auth,async (req,res)=>{
         res.render('home',{
             user:req.user,
             admin:req.user.role==="admin"?true:false,
         })
-    else 
-    res.render('home')
 })
 
 app.get('*',(req,res)=>{
