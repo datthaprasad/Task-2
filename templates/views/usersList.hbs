@@ -115,11 +115,15 @@ display: table;
 }
 }
             .card {
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-            max-width: 300px;
-            margin: auto;
-            padding-bottom: 3%;
-            text-align: center;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+                max-width: 400px;
+                margin: auto;
+                text-align: center;
+                padding-bottom: 1vh;
+                border-radius: 10px;
+                border: 2px solid black;
+                border-bottom: none;
+                margin-top: 2vh;
             }
 
             .title {
@@ -185,14 +189,20 @@ display: table;
     </head>
     <body>
         {{>header this}}
-        <h1 style="text-align: center;">Users with JOB ROLE={{role}}</h1>
+        <h1 style="margin-bottom:2px;boder:2px solid black;text-align: center;">Users with JOB ROLE={{role}}</h1>
+        {{#if users}}
         {{#each users}}
             <div class="card">
                 <h1>{{this.name}}</h1>
+                <h2 style="background-color: chartreuse;">User Name={{this.userName}}</h2>
                 <p class="title">Job Role: {{this.role}}</p>
                 <p>{{this.age}} years old,{{this.gender}}</p>
                 <p>{{this.email}}</p>
-                <p>Contact : {{this.phone}}</p>
+                <p>Phone : {{this.phone}}</p>
+                {{#if courseCount}}
+                    <p>Handling {{courseCount}} courses</p>
+                {{/if}}
+
                 <div class="dropdown1">
                     <button style="width: 100%;">Assign Role 
                     <i class="fa fa-caret-down"></i>
@@ -205,9 +215,25 @@ display: table;
                     </div>
                 </div> 
 
-                
+                <div style=" width: 100%;
+                            float: left;
+                            border: solid 1px blue;
+                            text-align: center;">
+                    <button style="display: inline-block;float:left;width:33%" onclick=location.href="/edit/user:{{this._id}}">edit</button>
+                    <button style="display: inline-block;width:33%" onclick=location.href="/deleteUser:{{this._id}}">delete</button>
+                    <button style="display: inline-block;float:right;width:33%" onclick=location.href="/studentReport:{{this._id}}">report</button>
+                </div>
+
+               
+
+                <hr>
+                <br><br><br><br>
             </div>
         {{/each}}
+        {{else}}
+            <h1 style="background-color: red;text-align:center">EMPTY LIST !!!...</h1>
+        {{/if}}
+
 
    
      {{>editProfile this}}

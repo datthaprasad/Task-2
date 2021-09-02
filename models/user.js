@@ -4,7 +4,6 @@ const jwt=require('jsonwebtoken');
 const {SECRET}=require('../config/setting')
 
 
-
 const userSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -42,11 +41,35 @@ const userSchema=new mongoose.Schema({
         default:'user',
         lowercase:true,
     },
+    courseCount:{
+        type:Number,
+        max:4,
+        default:0
+    },
+    // joinedCourses:[{
+    //     course:{
+    //         type:mongoose.Schema.Types.ObjectId,
+    //         default:null
+    //     }
+    // }],
     tokens:[{
         token:{
             type:String
         }
     }]
+})
+
+userSchema.virtual('courses',{
+    ref:'Course',
+    localField:'_id',
+    foreignField:'teacher'
+    
+})
+
+userSchema.virtual('students',{
+    ref:'Course',
+    localField:"_id",
+    foreignField:"students.studentId"
 })
 
 

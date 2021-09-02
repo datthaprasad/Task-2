@@ -176,4 +176,21 @@ router.post('/forgotPassword',async (req,res)=>{
 
 })
 
+//delete account
+router.get('/deleteAccount',auth,async (req,res)=>{
+    if(!req.user.name)
+        return res.status(400).send('please login or create account')
+    try{
+        console.log(req.user._id);
+        const user=await User.findByIdAndDelete(req.user._id);
+
+        await res.clearCookie();
+        res.redirect('/')
+    }
+    catch(err){
+        res.status(400).send(err)
+    }
+
+})
+
 module.exports=router;

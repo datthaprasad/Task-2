@@ -10,7 +10,7 @@ mongoose.connect(MONGODB_URL,
     }).then(()=>{
         console.log("database connected");
     }).catch((e)=>{
-        console.log("error"+e);
+        console.log("database disconnected, Check your internet");
 });
 
 
