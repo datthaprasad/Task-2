@@ -85,7 +85,6 @@ router.post('/edit/users:id', auth, async (req, res) => {
             await user.save();
             res.redirect('/users:' + user.role.toUpperCase())
         } catch (e) {
-            console.log(e);
             errorMessage(e, res, "EDiting profile failed")
         }
 })
@@ -163,7 +162,6 @@ router.post('/createCourse', auth, async (req, res) => {
             if (teacher != "assign later") {
 
                 const Teacher = await User.findById(teacher);
-                console.log(Teacher);
                 if (Teacher.courseCount < 4) {
                     Teacher.courseCount += 1;
                     await Teacher.save();
@@ -328,7 +326,6 @@ router.post('/updateCourse:id', auth, async (req, res) => {
                             Teacher.courseCount += 1;
                             oldTeacher.courseCount -= 1;
                             await oldTeacher.save();
-                            console.log(oldTeacher, Teacher);
                             await Teacher.save();
                             course.teacher = teacher;
                             course.name = name;
@@ -425,7 +422,7 @@ router.post('/scheduleTest:id', auth, async (req, res) => {
             res.redirect('/viewCourse')
 
         }
-        else if ((new Date(time).getTime() / 100000000) > (new Date().getTime() / 100000000)) {
+        else if (parseInt(new Date(time).getTime() / 100000000) >= parseInt(new Date().getTime() / 100000000)) {
             course.test = time;
             await course.save();
             if (req.user.role === 'teacher')

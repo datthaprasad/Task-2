@@ -87,14 +87,28 @@ router.get('/giveRating:idAndRating', auth, async (req, res) => {
     try {
         const course = await Course.findById(req.params.idAndRating.split(":")[1]);
 
-        if (course.studentsCountForRating.includes(req.user._id))
-            return res.status(500).send("You already rated this course..")
-        course.studentsCountForRating.push(req.user._id);
-        course.totalRating += parseInt(req.params.idAndRating.split(":")[2]);
 
+        const updateRating = new Promise((async (resolve, reject) => {
+            course.students.forEach((student) => {
+                if (student.studentId.toString() === req.user._id.toString()) {
+                    if (course.studentsCountForRating.includes(req.user._id))
+                        course.totalRating -= student.rating;
+                    student.rating = parseInt(req.params.idAndRating.split(":")[2])
+                    resolve();
+                }
+            })
+        }));
+
+        await updateRating;
+        if (!course.studentsCountForRating.includes(req.user._id))
+            course.studentsCountForRating.push(req.user._id);
+        course.totalRating += parseInt(req.params.idAndRating.split(":")[2]);
         course.rating = course.totalRating / course.studentsCountForRating.length;
-        console.log(course);
         await course.save();
+
+
+
+
         res.redirect('/viewJoinedCourses')
 
     }

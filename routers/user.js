@@ -107,7 +107,6 @@ router.post('/edit',auth,async (req,res)=>{
         
         res.redirect('/')
     } catch (e) {
-        console.log(e);
         errorMessage(e,res,"EDiting profile failed")
     }
 })
@@ -138,7 +137,6 @@ router.post('/reset',auth,async (req,res)=>{
 router.post('/forgotPassword',async (req,res)=>{
 
     const updates = Object.keys(req.body)
-    console.log(updates);
     const allowedUpdates = ['name', 'email', 'password','confirm_password']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
@@ -154,7 +152,6 @@ router.post('/forgotPassword',async (req,res)=>{
     try {
         const user = await User.findOne({email})
         
-        console.log(name,user.name);
         if(user.name===name){
             user.password=req.body.password;
             await user.save();
@@ -181,7 +178,6 @@ router.get('/deleteAccount',auth,async (req,res)=>{
     if(!req.user.name)
         return res.status(400).send('please login or create account')
     try{
-        console.log(req.user._id);
         const user=await User.findByIdAndDelete(req.user._id);
 
         await res.clearCookie();

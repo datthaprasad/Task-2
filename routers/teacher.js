@@ -115,7 +115,6 @@ router.get('/studentsList:id', auth, async (req, res) => {
             })
         });
         await bar;
-        console.log(students);
         res.render('studentsList', { students })
     }
     catch (e) {
