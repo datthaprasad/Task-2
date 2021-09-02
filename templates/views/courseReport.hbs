@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>COURSE REPORT</title>
-    </head>
-    <body>
-        <div style="text-align: center;border:2px solid black;padding:1vh;">
-            <h1>Course name = {{course.name}}</h1>
-            <h2>Total duration = {{course.duration}} hours</h2>
-            <p>Completed hours = {{course.completedDuration}} hours</p>
-            <p>Remaining hours = {{remaining}} hours</p>
-            
-            <p>Number of students in this course = {{count}}</p>
-            <p>{{ratingCount}} people rated this course</p>
-            <h2>Ratings = {{course.rating}}</h2>
 
-        </div>
-    </body>
+<head>
+    <title>COURSE REPORT</title>
+</head>
+
+<body>
+    <div style="text-align: center;border:2px solid black;padding:1vh;">
+        <h1>Course name = {{course.name}}</h1>
+        <h2>Total duration = {{course.duration}} hours</h2>
+        <p>Completed hours = {{course.completedDuration}} hours</p>
+        <p>Remaining hours = {{remaining}} hours</p>
+
+        <p>Number of students in this course = {{count}}</p>
+        <p>{{ratingCount}} people rated this course</p>
+        <h2>Ratings = {{course.rating}}</h2>
+
+    </div>
+</body>
+
 </html>

@@ -3,22 +3,22 @@
 
 <body style="text-align: center;">
 
-        <h1>Students List</h1>
+    <h1>Students List</h1>
     {{#if students}}
-        {{#each students}}
-        <h3>name {{name}}</h3>
-        <p>gender : {{gender}}</p>
-        <p>phone : {{phone}}</p>
-        <p>email : {{email}}</p>
-        <div style="text-align: center;padding:8px;border:5px solid green">
-                    <h4>Test taken {{testAttempt}} times</h4>
+    {{#each students}}
+    <h3>name {{name}}</h3>
+    <p>gender : {{gender}}</p>
+    <p>phone : {{phone}}</p>
+    <p>email : {{email}}</p>
+    <div style="text-align: center;padding:8px;border:5px solid green">
+        <h4>Test taken {{testAttempt}} times</h4>
         <h4>Marks scored {{marks}}</h4>
-        </div>
+    </div>
 
-        <hr><br>
-        {{/each}}
+    <hr><br>
+    {{/each}}
     {{else}}
-        <h1>No students joined till now</h1>
+    <h1>No students joined till now</h1>
     {{/if}}
 </body>
 

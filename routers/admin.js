@@ -381,7 +381,7 @@ router.get('/courseReport:id', auth, async (req, res) => {
         const course = await Course.findById(req.params.id.replace(":", ""));
         const remaining = parseFloat(course.duration) - parseFloat(course.completedDuration);
 
-        res.render('courseReport', { course,count:course.students.length, ratingCount: course.studentsCountForRating.length, remaining: remaining.toFixed(2) });
+        res.render('courseReport', { course, count: course.students.length, ratingCount: course.studentsCountForRating.length, remaining: remaining.toFixed(2) });
     }
     catch (e) {
         res.status(400).send("error " + e);
@@ -398,7 +398,7 @@ router.get('/studentReport:id', auth, async (req, res) => {
         const student = await User.findById(req.params.id.replace(":", ""));
         await student.populate('students').execPopulate();
         if (student.role === 'student')
-            res.render('studentReport', {student,courseCount:student.students.length,courses:student.students})
+            res.render('studentReport', { student, courseCount: student.students.length, courses: student.students })
         else
             res.status(500).send("Only students report available now.")
     }
@@ -418,7 +418,7 @@ router.post('/scheduleTest:id', auth, async (req, res) => {
 
         const course = await Course.findById(req.params.id.replace(":", ""));
         if (!time) {
-            course.test=undefined;
+            course.test = undefined;
             await course.save();
             if (req.user.role === 'teacher')
                 return res.redirect('/viewMyCourses')

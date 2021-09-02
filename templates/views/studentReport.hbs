@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>
-            STUDENT REPORT
-        </title>
-    </head>
-    <body>
-        <div style="text-align: center;">
+
+<head>
+    <title>
+        STUDENT REPORT
+    </title>
+</head>
+
+<body>
+    <div style="text-align: center;">
         <h2>Student name = {{student.name}}</h2>
         <p>Have joined {{courseCount}} courses</p>
         <ul>
             {{#each courses}}
-                <li>course name = {{name}}</li>
-                <li>marks = {{marks}}</li>
+            <li>course name = {{name}}</li>
+            <li>marks = {{marks}}</li>
             {{/each}}
         </ul>
 
-        </div>
-    </body>
+    </div>
+</body>
+
 </html>

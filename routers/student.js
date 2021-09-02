@@ -111,7 +111,7 @@ router.get('/attemptTest:id', auth, async (req, res) => {
         return res.status(500).send("you are not STUDENT, Sorry");
     try {
         const course = await Course.findById(req.params.id.replace(":", ""));
-        course.students=course.students.filter((data) => req.user._id.toString() === data.studentId.toString());
+        course.students = course.students.filter((data) => req.user._id.toString() === data.studentId.toString());
         if (course.students[0].testAttempt === 3)
             return res.status(400).send("You already attemptd test 3 Times")
         if (course.questions)
@@ -177,7 +177,7 @@ router.get('/testResult:id', auth, async (req, res) => {
     try {
 
         const course = await Course.findById(req.params.id.replace(":", ""));
-        course.students=course.students.filter((data) => req.user._id.toString() === data.studentId.toString());
+        course.students = course.students.filter((data) => req.user._id.toString() === data.studentId.toString());
         if (course.students[0].testAttempt === 0)
             return res.status(400).send("Try a test to view score")
         res.render('testResult', { score: course.students[0].marks, id: req.params.id.replace(":", ""), attemptLeft: 3 - course.students[0].testAttempt })
@@ -196,7 +196,7 @@ router.get('/downloadCertificate:id', auth, async (req, res) => {
         return res.status(500).send("you are not STUDENT, Sorry");
     try {
         const course = await Course.findById(req.params.id.replace(":", ""));
-        course.students=course.students.filter((data) => req.user._id.toString() === data.studentId.toString());
+        course.students = course.students.filter((data) => req.user._id.toString() === data.studentId.toString());
 
         if (course.students[0].marks > 35)
             res.render('certificate', { courseName: course.name, marks: course.students[0].marks, name: req.user.name })

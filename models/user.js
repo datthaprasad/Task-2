@@ -1,75 +1,69 @@
-const mongoose=require('mongoose');
-const bcrypt=require('bcryptjs');
-const jwt=require('jsonwebtoken');
-const {SECRET}=require('../config/setting')
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { SECRET } = require('../config/setting')
 
 
-const userSchema=new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,     
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
     },
-    userName:{
-        type:String,
-        required:true
+    userName: {
+        type: String,
+        required: true
     },
-    phone:{
-        type:Number,
-        required:true,
+    phone: {
+        type: Number,
+        required: true,
     },
-    email:{
-        type:String,
-        unique:true,
-        required:true,
-        lowercase:true,
+    email: {
+        type: String,
+        unique: true,
+        required: true,
+        lowercase: true,
     },
-    password:{
-        type:String,
-        required:true,
+    password: {
+        type: String,
+        required: true,
     },
-    gender:{
-        type:String,
-        lowercase:true,
-        required:true,
+    gender: {
+        type: String,
+        lowercase: true,
+        required: true,
     },
-    age:{
-        type:Number,
-        required:true,
+    age: {
+        type: Number,
+        required: true,
     },
-    role:{
-        type:String,
-        default:'user',
-        lowercase:true,
+    role: {
+        type: String,
+        default: 'user',
+        lowercase: true,
     },
-    courseCount:{
-        type:Number,
-        max:4,
-        default:0
+    courseCount: {
+        type: Number,
+        max: 4,
+        default: 0
     },
-    // joinedCourses:[{
-    //     course:{
-    //         type:mongoose.Schema.Types.ObjectId,
-    //         default:null
-    //     }
-    // }],
-    tokens:[{
-        token:{
-            type:String
+    tokens: [{
+        token: {
+            type: String
         }
     }]
 })
 
-userSchema.virtual('courses',{
-    ref:'Course',
-    localField:'_id',
-    foreignField:'teacher'
-    
+userSchema.virtual('courses', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'teacher'
+
 })
 
-userSchema.virtual('students',{
-    ref:'Course',
-    localField:"_id",
-    foreignField:"students.studentId"
+userSchema.virtual('students', {
+    ref: 'Course',
+    localField: "_id",
+    foreignField: "students.studentId"
 })
 
 
@@ -89,9 +83,9 @@ userSchema.statics.findByCredentials = async (email, password) => {
     return user
 }
 
-userSchema.methods.generateAuthToken=async function(){
+userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = jwt.sign({ _id: user._id.toString() }, SECRET,{expiresIn:"30d"})
+    const token = jwt.sign({ _id: user._id.toString() }, SECRET, { expiresIn: "30d" })
 
     user.tokens = user.tokens.concat({ token })
     await user.save()
@@ -111,16 +105,16 @@ userSchema.methods.toJSON = function () {
 
 
 
-userSchema.pre("save",async function (){
-    const user=this;
-    if(user.isModified('password')){
-        const hash=await bcrypt.hash(user.password,8);
-        user.password=hash;
+userSchema.pre("save", async function () {
+    const user = this;
+    if (user.isModified('password')) {
+        const hash = await bcrypt.hash(user.password, 8);
+        user.password = hash;
     }
 })
 
-const User=mongoose.model("User",userSchema)
+const User = mongoose.model("User", userSchema)
 
 
 
-module.exports=User;
+module.exports = User;

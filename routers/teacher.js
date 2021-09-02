@@ -107,16 +107,16 @@ router.get('/studentsList:id', auth, async (req, res) => {
         studentsInCourse = studentsInCourse.students;
         var bar = new Promise((resolve, reject) => {
             studentsInCourse.forEach(async (data, index, studentsInCourse) => {
-                let tempStudent=await User.findById(data.studentId);
-                tempStudent.marks=data.marks;
-                tempStudent.testAttempt=data.testAttempt;
+                let tempStudent = await User.findById(data.studentId);
+                tempStudent.marks = data.marks;
+                tempStudent.testAttempt = data.testAttempt;
                 students.push(tempStudent);
                 if (index === studentsInCourse.length - 1) resolve()
             })
         });
         await bar;
         console.log(students);
-        res.render('studentsList',{students})
+        res.render('studentsList', { students })
     }
     catch (e) {
         res.status(400).send("error " + e)

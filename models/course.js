@@ -49,7 +49,7 @@ const courseSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             default: null,
             ref: User,
-            unique:true
+            unique: true
         },
         marks: {
             type: Number,
