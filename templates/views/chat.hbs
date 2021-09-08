@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Chat App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        html {
+            font-size: 16px
+        }
+
+        input {
+            font-size: 14px
+        }
+
+        body {
+            line-height: 1.4;
+            color: #333;
+            font-family: Helvetica, Arial, sans-serif
+        }
+
+        h1 {
+            margin-bottom: 16px
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #777
+        }
+
+        input {
+            border: 1px solid #eee;
+            padding: 12px;
+            outline: none
+        }
+
+        button {
+            cursor: pointer;
+            padding: 12px;
+            background: #7C5CBF;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            transition: background .3s ease
+        }
+
+        button:hover {
+            background: #6b47b8
+        }
+
+        button:disabled {
+            cursor: default;
+            background: #7c5cbf94
+        }
+
+        .centered-form {
+            background: #333744;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+
+        .centered-form__box {
+            box-shadow: 0 0 17px 1px #1D1F26;
+            background: #F7F7FA;
+            padding: 24px;
+            width: 250px
+        }
+
+        .centered-form button {
+            width: 100%
+        }
+
+        .centered-form input {
+            margin-bottom: 16px;
+            width: 100%
+        }
+
+        .chat {
+            display: flex
+        }
+
+        .chat__sidebar {
+            height: 100vh;
+            color: #fff;
+            background: #333744;
+            width: 225px;
+            overflow-y: scroll
+        }
+
+        .chat__main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: 100vh
+        }
+
+        .chat__messages {
+            flex-grow: 1;
+            padding: 24px 24px 0;
+            overflow-y: scroll
+        }
+
+        .message {
+            margin-bottom: 16px
+        }
+
+        .message__name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .message__meta {
+            color: #777;
+            font-size: 14px
+        }
+
+        .message a {
+            color: #0070CC
+        }
+
+        .compose {
+            display: flex;
+            flex-shrink: 0;
+            margin-top: 16px;
+            padding: 24px
+        }
+
+        .compose form {
+            display: flex;
+            flex-grow: 1;
+            margin-right: 16px
+        }
+
+        .compose input {
+            border: 1px solid #eee;
+            width: 100%;
+            padding: 12px;
+            margin: 0 16px 0 0;
+            flex-grow: 1
+        }
+
+        .compose button {
+            font-size: 14px
+        }
+
+        .room-title {
+            font-weight: 400;
+            font-size: 22px;
+            background: #2c2f3a;
+            padding: 24px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            border: 2px double pink;
+            margin-top: 2px;
+            text-align: center;
+        }
+
+        .list-title {
+            font-weight: 500;
+            font-size: 18px;
+            margin-bottom: 4px;
+            padding: 12px 24px 0
+        }
+
+        .users {
+            list-style-type: none;
+            font-weight: 300;
+            padding: 12px 24px 0
+        }
+
+        .users li {
+            padding: 10px;
+            text-align: center;
+            font-size: 19px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-weight: bolder;
+            color: pink;
+            text-transform: capitalize;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat">
+        <div id="sidebar" class="chat__sidebar">
+            <h2 class="room-title">{{course}}</h2>
+            <ul class="users">
+                <li id="fromName" style="border: 2px solid blue;margin-bottom:5px;">{{from.name}}<span  style="color: chartreuse;font-size:xx-large">*</span></li>
+                <li id="toName" style="border: 2px solid pink;">{{to.name}}<span id="isOnline" style="color: red;font-size:xx-large">*</span></li>
+
+                <li id="studentId" style="display:none;">{{studentId}}</li>
+                <li id="teacherId" style="display:none;">{{teacherId}}</li>
+                <li id="myId" style="display:none;">{{myId}}</li>
+                <li id="fromId" style="display:none;">{{from._id}}</li>
+                <li id="toId" style="display:none;">{{to._id}}</li>
+            </ul>
+        </div>
+
+        <div class="chat__main">
+            <div id="messages" class="chat__messages">
+
+                {{#each messages}}
+                {{!-- recieved message --}}
+                {{#if this.recieved}}
+                <div class="message" style="border: 2px solid pink;padding:15px;width:max-content;border-radius:20px;">
+                    <p>
+                        <span class="message__name">{{sentBy}}</span>
+                        <span class="message__meta">{{date}}</span>
+                    </p>
+                    <p>{{message}}</p>
+                </div>
+
+                {{!-- //my message --}}
+                {{else}}
+                <div class="message"
+                    style="border: 2px solid blue;padding:15px;width:max-content;border-radius:20px;margin-left:auto;">
+                    <p>
+                        <span style="" class="message__name">{{sentBy}}</span>
+                        <span class="message__meta">{{date}}</span>
+                    </p>
+                    <p>{{message}}</p>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+
+            <div class="compose">
+                <form id="message-form">
+                    <input name="message" placeholder="Message" required autocomplete="off">
+                    <button>Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script id="message-template" type="text/hbs">
+    {{#each messages}}
+            <div class="message">
+                <p>
+                    <span class="message__name">{{from}}</span>
+                    <span class="message__meta">{{to}}</span>
+                </p>
+                <p>{{{messag}}} hellow</p>
+            </div>
+        {{/each}}
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+
+</html>

@@ -27,13 +27,46 @@ const courseSchema = new mongoose.Schema({
         default: "00.00",
         type: String
     },
-    test: {
-        type: String,
-        default: undefined
+    tests: {
+        test1: {
+            type: String,
+            default: undefined
+        },
+        test2: {
+            type: String,
+            default: undefined
+        },
+        test3: {
+            type: String,
+            default: undefined
+        }
+
     },
     questions: {
-        type: Object,
-        default: undefined
+        test1: {
+            type: Object,
+            default: undefined
+        },
+        test2: {
+            type: Object,
+            default: undefined,
+        },
+        test3: {
+            type: Object,
+            default: undefined
+        },
+        assignment1: {
+            type: Object,
+            default: undefined
+        },
+        assignment2: {
+            type: Object,
+            default: undefined
+        },
+        assignment3: {
+            type: Object,
+            default: undefined
+        }
     },
     totalRating: {
         type: Number,
@@ -48,25 +81,31 @@ const courseSchema = new mongoose.Schema({
         studentId: {
             type: mongoose.Schema.Types.ObjectId,
             default: null,
-            ref: User,
-            unique: true
+            ref: User
         },
         marks: {
             type: Number,
-            max: 100,
-            min: 0,
             default: 0
         },
-        testAttempt: {
+        module: {
             type: Number,
-            max: 3,
-            default: 0
+            max: 4,
+            default: 1
         },
-        rating:{
+        rating: {
+            type: Number,
+            max: 5,
+            min: 0,
+            default: undefined
+        },
+        testAttempt:{
             type:Number,
-            max:5,
-            min:0,
-            default:undefined
+            default:0
+        },
+        assignmentCompleted:{
+            max:3,
+            default:0,
+            type:Number
         }
     }]
 })

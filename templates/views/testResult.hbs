@@ -10,10 +10,43 @@
 
 <body>
     <div style="text-align: center;">
-        <h1>Your score is {{score}} out of 100</h1>
-        <p>You have {{attemptLeft}} attempt left to improve your score</p>
+        {{#if assignmentResult}}
+        <h1>your assignment score is {{score}}</h1>
+        {{#if failed}}
+        Your assignment score is too less, try again
+        <a href="/attemptAssignmentTest:{{this.id}}" style="padding: 10px;border:2px solid black;">click here to submit again</a>
+        {{else}}
+        <p>you have completed total {{assignment}} assignments</p>
+        {{#if assignmentCompleted}}
+        You are succesfuuly completed all assignments
+        {{else}}
+        <a href="/attemptAssignmentTest:{{this.id}}" style="padding: 10px;border:2px solid black;">click here to submit
+            next assignment</a>
+        {{/if}}
+        {{/if}}
+
+        {{else}}
+
+        {{#if testResult}}
+        <h1>Your test score is {{score}}</h1>
+        {{else}}
+        <h1>Your Average score is {{score}} out of 100</h1>
+        {{/if}}
+        {{#if failed}}
+        <h1>Due to low score, you can not move to next module, Try again the test to score more.</h1>
+        {{/if}}
+        {{#if testCompleted}}
+        <p>You have completed all tests in this course, please submit assignment and download certificate of yours</p>
+        {{else}}
+        <p>You are in {{this.module}} module of course, please complete all module and assignments to download certificate</p>
+        <p>You have attempted test {{testAttempt}} times in this module</p>
+        {{/if}}
         <button onclick=location.href="/downloadCertificate:{{id}}"
             style="padding: 10px;border:5px solid black">DOWNLOAD CERTIFICATE</button>
+
+        <button onclick=location.href="/viewJoinedCourses" style="padding: 10px;border:5px solid black">Joined
+            courses</button>
+        {{/if}}
     </div>
 </body>
 

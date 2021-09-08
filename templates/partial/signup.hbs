@@ -27,7 +27,15 @@
           <option value="female">Female</option>
           <option value="other">Other</option>
         </select>
-        <br>
+        <br><br>
+
+        <label for="role">Choose your Role</label>
+        <select name="role" required>
+          <option value="student">Student</option>
+          <option value="teacher">Teacher</option>
+        </select>
+        <br><br>
+
 
         <label for="email"><b>Email</b></label>
         <input type="text" placeholder="Enter Email" name="email" required>
@@ -35,6 +43,7 @@
         <label for="psw"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required onclick="myFunction3()" id="psw3">
         <input type="checkbox" id="checkbox3" onclick="myFunction3()">Show Password
+        <br><br>
 
         <label for="psw-repeat"><b>Repeat Password</b></label>
         <input type="password" placeholder="Repeat Password" name="confirm_password" required id="psw4"

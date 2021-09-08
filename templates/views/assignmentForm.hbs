@@ -7,9 +7,9 @@
 </head>
 
 <body style="text-align: center;">
-    <h1>Test for {{this.name}} of module:{{this.module}}</h1>
-    <form action="/attemptTest:{{this._id}}" method="POST" style="text-align: center;">
-    <input style="display: none;" name="module" value={{this.module}}>
+    <h1>Assignment {{this.assignmentNumber}} for {{this.name}} </h1>
+    <form action="/attemptAssignmentTest:{{this._id}}" method="POST" style="text-align: center;">
+    <input style="display: none;" name="assignment" value={{this.assignment}}>
       <h2> 1. {{question.first}}</h2>
         <h3>Optons</h3>
         <div style="border: 2px solid blue;padding:10px;width:fit-content;max-width:50%;align-self:center;text-align:center;margin-left:25%;">

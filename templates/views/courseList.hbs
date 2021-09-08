@@ -218,6 +218,10 @@
         <p>Handled by {{this.teacherName.name}}</p>
         <p>Phone :{{this.teacherName.phone}}</p>
         <p>Rating: {{this.rating}}</p>
+
+        <p>Module 1 Test is on {{tests.test1}}</p>
+        <p>Module 2 Test is on {{tests.test2}}</p>
+        <p>Module 3 Test is on {{tests.test3}}</p>
         <button style="width: 100%;" onclick=location.href="/assignTeacher:{{this._id}}">Assign New Teacher</button>
         <div style=" width: 100%;
                             float: left;
@@ -231,7 +235,14 @@
                 onclick=location.href='/courseReport:{{this._id}}'>report</button>
             <form action='/scheduleTest:{{this._id}}' method="POST">
                 <label for="test">Test is on : </label>
-                <input type="date" name="time" value={{this.test}}>
+                <input type="date" name="time" value={{this.test}} required>
+                <label for="gender">Select Type</label>
+                <select name="type" required>
+                    <option value="test1">module 1 test</option>
+                    <option value="test2">module 2 test</option>
+                    <option value="test3">module 3 test</option>
+                </select>
+                <br><br>
                 <button style="text-align: center;background-color:blue;border-radius:50px;margin-bottom:auto"
                     type="submit">Pick a date to schedule/reschedule test</button>
 

@@ -411,7 +411,7 @@ router.post('/scheduleTest:id', auth, async (req, res) => {
     if (req.user.role != 'admin' && req.user.role != 'teacher')
         return res.status(500).send("you are not ADMIN / TEACHER, Sorry");
     try {
-        const { time } = req.body;
+        const { time,type } = req.body;
 
         const course = await Course.findById(req.params.id.replace(":", ""));
         if (!time) {
@@ -422,8 +422,9 @@ router.post('/scheduleTest:id', auth, async (req, res) => {
             res.redirect('/viewCourse')
 
         }
-        else if (parseInt(new Date(time).getTime() / 100000000) >= parseInt(new Date().getTime() / 100000000)) {
-            course.test = time;
+
+        else if (parseInt(new Date(time).getTime() / 10000000000) >= parseInt(new Date().getTime() / 10000000000)) {
+            course.tests[type] = time;
             await course.save();
             if (req.user.role === 'teacher')
                 return res.redirect('/viewMyCourses')

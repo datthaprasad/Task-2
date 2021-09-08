@@ -8,7 +8,21 @@
 
 <body>
     <h1>Creating test for {{this.name}}</h1>
+
     <form action="/createTest:{{this._id}}" method="POST" style="text-align: center;">
+
+        <label for="gender">Select Type</label>
+        <select name="type" required>
+            <option value="test1">module 1 test</option>
+            <option value="test2">module 2 test</option>
+            <option value="test3">module 3 test</option>
+            <option value="assignment1">module 1 assignment</option>
+            <option value="assignment2">module 2 assignment</option>
+            <option value="assignment3">module 3 assignment</option>
+        </select>
+        <br><br>
+
+
         <label for="first"> enter first question : </label>
         <input type="text" name="first" id="first" required>
         <br><br>

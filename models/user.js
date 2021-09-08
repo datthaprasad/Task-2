@@ -46,6 +46,24 @@ const userSchema = new mongoose.Schema({
         max: 4,
         default: 0
     },
+    xp: {
+        type: Number,
+        default: 0
+    },
+    loginDate:{
+        type:Date,
+        default:undefined
+    },
+    level: {
+        type: Number,
+        default: 1
+    },
+    module:{
+        type:Number,
+        min:1,
+        max:3,
+        default:1
+    },
     tokens: [{
         token: {
             type: String

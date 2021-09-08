@@ -156,11 +156,17 @@
         <a href="/deleteAccount">Delete Account</a>
       </div>
     </div>
-
+    {{#if teacher}}
+    <li style="margin-right: 0;color:blue;font-size:xx-large;text-align:right;"> '   XP : {{user.xp}}  -  LEVEL : {{user.level}}    '</li>
+    {{/if}}
+    {{#if student}}
+    <li style="margin-right: 0;color:blue;font-size:xx-large;text-align:right;"> '   XP : {{user.xp}}  -  LEVEL : {{user.level}}    '</li>
+    {{/if}}
     {{else}}
     <li><a onclick="document.getElementById('id02').style.display='block'" href="#login">Login</a></li>
     <li onclick="document.getElementById('id01').style.display='block'"><a href="#signUp"> Sign Up</a></li>
     {{/if}}
+
 
   </ul>
 </body>

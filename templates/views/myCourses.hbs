@@ -217,6 +217,9 @@
         <p class="title">Duration: {{this.duration}}</p>
         <p>Completed : {{this.completedDuration}}</p>
         <p>Rating: {{this.rating}}</p>
+        <p>Module 1 Test is on {{tests.test1}}</p>
+        <p>Module 2 Test is on {{tests.test2}}</p>
+        <p>Module 3 Test is on {{tests.test3}}</p>
         <div style=" width: 100%;
                             float: left;
                             border: solid 1px blue;
@@ -227,9 +230,19 @@
                 test</button>
             <button style="display: inline-block;float:right;width:33%"
                 onclick=location.href='/submitReport:{{this._id}}'>submit report</button>
+
+            <button onclick=location.href="/leaveCourse:{{this._id}}">Leave this course</button>
+
             <form action='/scheduleTest:{{this._id}}' method="POST">
                 <label for="test">Test is on : </label>
-                <input type="date" name="time" value={{this.test}}>
+                <input type="date" name="time" value={{this.test}} required>
+                <label for="gender">Select Type</label>
+                <select name="type" required>
+                    <option value="test1">module 1 test</option>
+                    <option value="test2">module 2 test</option>
+                    <option value="test3">module 3 test</option>
+                </select>
+                <br><br>
                 <button style="text-align: center;background-color:blue;border-radius:50px;margin-bottom:auto"
                     type="submit">Pick a date to schedule/reschedule test</button>
 

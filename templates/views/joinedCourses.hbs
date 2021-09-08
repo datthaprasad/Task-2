@@ -215,6 +215,22 @@
         <p class="title">Duration: {{this.duration}}</p>
         <p>Completed : {{this.completedDuration}}</p>
         <p>Rating: {{this.rating}}</p>
+        {{#if Completed}}
+        <p>You are completed this course</p>
+        {{else}}
+        <p>You are in {{this.module}} module</p>
+        {{/if}}
+        {{#if test}}
+        <p> The next test is on {{this.test}}</p>
+        {{/if}}
+        <br>
+        <a style="border-radius: 20px;padding:10px;border:3px solid blue;font-weight:900;"
+            href="/chatWithTeacher:{{this.teacher}}:{{this.name}}" target="_blank">chat with Teacher</a>
+
+        <br><br><br><br>
+        <a href="/attemptAssignmentTest:{{this._id}}" style="padding: 15px;border:5px solid black;">Complete Assignments</a>
+        <br><br>
+
         <div style=" width: 100%;
                             float: left;
                             border: solid 1px blue;
@@ -237,13 +253,14 @@
             <button style="display: inline-block;float:right;width:33%"
                 onclick=location.href='/downloadCertificate:{{this._id}}'>Certificate</button>
             <form action='/attemptTest:{{this._id}}' method="GET">
-                <label for="test">Test is on : {{this.test}}</label>
                 {{#if this.attemptTest}}
+                <label for="test">Module {{this.module}} Test is live now</label>
                 <button style="text-align: center;background-color:blue;border-radius:50px;margin-bottom:auto"
                     type="submit">Attempt test</button>
                 {{/if}}
 
             </form>
+            
         </div>
         <br><br><br><br><br><br><br>
 
