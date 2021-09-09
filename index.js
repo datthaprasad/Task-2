@@ -1,3 +1,4 @@
+//user-created modules
 const auth = require('./middleware/auth')
 const userRouter = require('./routers/user')
 const adminRouter = require('./routers/admin');
@@ -7,6 +8,7 @@ const chatRouter = require('./routers/chatRouter');
 const socketHelper = require('./helper/socketHelper')
 require('./models/connectDatabase')
 
+//builtin modules
 const hbs = require('hbs')
 const http = require('http')
 const bp = require('body-parser')
@@ -17,6 +19,7 @@ const socketio = require('socket.io')
 const app = express();
 const server = http.createServer(app)
 const io = socketio(server)
+
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(bp.urlencoded({ extended: true }))
@@ -37,7 +40,6 @@ app.set('views', __dirname + '/templates/views');
 hbs.registerPartials(__dirname + '/templates/partial');
 
 app.use("/js", express.static(__dirname + '/templates/js'));
-
 
 
 app.get('/', auth, async (req, res) => {

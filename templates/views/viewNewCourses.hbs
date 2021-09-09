@@ -214,8 +214,9 @@
     {{#each courses}}
     <div class="card">
         <h2 style="background-color: chartreuse;">Course Name={{this.name}}</h2>
-        <p class="title">Duration: {{this.duration}}</p>
-        <p>Completed : {{this.completedDuration}}</p>
+        <p class="title">Duration: {{this.hours}}</p>
+        <p>Completed : {{this.completedHours}}</p>
+        <p>{{this.students.length}} students joined to this course</p>
         <p>Rating: {{this.rating}}</p>
         <form action='/joinCourse:{{this._id}}' method="POST">
             <button style="text-align: center;background-color:blue;border-radius:50px;margin-bottom:auto"

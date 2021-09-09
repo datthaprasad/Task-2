@@ -212,13 +212,22 @@
     {{#each courses}}
     <div class="card">
         <h2 style="background-color: chartreuse;">Course Name={{this.name}}</h2>
-        <p class="title">Duration: {{this.duration}}</p>
-        <p>Completed : {{this.completedDuration}}</p>
+        <p class="title">Duration: {{this.hours}}</p>
+        <p>Completed : {{this.completedHours}}</p>
         <p>Rating: {{this.rating}}</p>
-        {{#if Completed}}
+        {{#if this.courseCompleted}}
         <p>You are completed this course</p>
         {{else}}
-        <p>You are in {{this.module}} module</p>
+            {{#if testCompleted}}
+                <P>You are finished with all tests</P>
+            {{else}}
+                <p>You are in {{this.module}} module</p>
+            {{/if}}
+            {{#if assignmentTestCompleted}}
+                <p>you have finished all assignments</p>
+            {{else}}
+                <p>you have not completed assignments</p>
+            {{/if}}
         {{/if}}
         {{#if test}}
         <p> The next test is on {{this.test}}</p>

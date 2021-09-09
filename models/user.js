@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { SECRET } = require('../config/setting')
+const { SECRET } = require('../config/setting');
+const { JWT_EXPIRE } = require('../global/constants');
 
 
 const userSchema = new mongoose.Schema({
@@ -50,19 +51,19 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    loginDate:{
-        type:Date,
-        default:undefined
+    loginDate: {
+        type: Date,
+        default: undefined
     },
     level: {
         type: Number,
         default: 1
     },
-    module:{
-        type:Number,
-        min:1,
-        max:3,
-        default:1
+    module: {
+        type: Number,
+        min: 1,
+        max: 3,
+        default: 1
     },
     tokens: [{
         token: {
@@ -103,7 +104,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = jwt.sign({ _id: user._id.toString() }, SECRET, { expiresIn: "30d" })
+    const token = jwt.sign({ _id: user._id.toString() }, SECRET, { expiresIn: JWT_EXPIRE })
 
     user.tokens = user.tokens.concat({ token })
     await user.save()

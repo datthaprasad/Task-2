@@ -1,78 +1,61 @@
 const express = require('express');
-const User = require('../models/user')
 const Course = require('../models/course')
 const auth = require('../middleware/auth');
-const courseValidate = require('../helper/courseValidate')
+const { isLogedIn, courseValidate, xpUpdate } = require('../helper/userAccountHelper');
+const { checkCourseCompletion, isTestScheduled, studentsList, converDurationToHours } = require('../helper/teacherHelper');
+const { XP_FOR_COURSE_COMPLETION_BY_TEACHER, XP_FOR_DAILY_TEACHING, XP_FOR_CREATE_TEST } = require('../global/constants');
+
 const router = new express.Router();
 
-
+//view teaching courses
 router.get('/viewMyCourses', auth, async (req, res) => {
-    if (!req.user.name)
-        return res.status(400).send('please login or create account')
-    if (req.user.role != 'teacher')
-        return res.status(500).send("you are not TEACHER, Sorry")
     try {
+        isLogedIn(req, 'teacher');
         await req.user.populate({ path: 'courses' }).execPopulate();
+        if (req.user.courses&&req.user.courses.length>0)
+            await converDurationToHours(req.user.courses);
         res.render('myCourses', { courses: req.user.courses, user: req.user, teacher: true });
     }
     catch (e) {
-        res.status(400).send("error " + e)
+        res.status(400).send("Bad Request, " + e)
     }
-
 })
 
-//report update on daily completion
+//report update on daily completion page render
 router.get('/submitReport:id', auth, async (req, res) => {
-    if (!req.user.name)
-        return res.status(400).send('please login or create account')
-    if (req.user.role != 'teacher')
-        return res.status(500).send("you are not TEACHER, Sorry")
     try {
+        isLogedIn(req, 'teacher');
         const course = await Course.findById(req.params.id.replace(":", ""));
         res.render('submitReport', course)
     } catch (e) {
-        res.status(400).send("error " + e)
+        res.status(400).send("Bad Request " + e)
     }
 })
 
+//report update on daily completion data handling
 router.post('/submitReport:id', auth, async (req, res) => {
-    if (!req.user.name)
-        return res.status(400).send('please login or create account')
-    if (req.user.role != 'teacher')
-        return res.status(500).send("you are not TEACHER, Sorry")
     try {
-        if (courseValidate(req.body.completed) === 1) {
-            const course = await Course.findById(req.params.id.replace(":", ""));
-            course.completedDuration = parseFloat(course.completedDuration) + parseFloat(req.body.completed);
-
-            if (parseFloat(course.completedDuration) > parseFloat(course.duration))
-                return res.status(400).send("error : completed time is more than duration");
-            req.user.xp += 25;
-            if (req.user.xp >= 100) {
-                req.user.level += parseInt(req.user.xp / 100);
-                req.user.xp = req.user.xp % 100;
-            }
-            await req.user.save();
-            course.save();
-            res.redirect('/viewMyCourses')
-        }
+        isLogedIn(req, 'teacher');
+        courseValidate(req.body.completed);
+        const course = await Course.findById(req.params.id.replace(":", ""));
+        if (checkCourseCompletion(req, course))
+            xpUpdate(req.user, XP_FOR_COURSE_COMPLETION_BY_TEACHER);
+        else xpUpdate(req.user, XP_FOR_DAILY_TEACHING);
+        await req.user.save();
+        await course.save();
+        res.redirect('/viewMyCourses')
     }
     catch (e) {
-        res.status(400).send("error " + e)
+        res.status(400).send("Bad Request, " + e);
     }
 
 })
 
-//create test
-
+//create test page render
 router.get('/createTest:id', auth, async (req, res) => {
-    if (!req.user.name)
-        return res.status(400).send('please login or create account')
-    if (req.user.role != 'teacher')
-        return res.status(500).send("you are not TEACHER, Sorry")
     try {
+        isLogedIn(req, 'teacher');
         const course = await Course.findById(req.params.id.replace(":", ""));
-
         res.render('createTest', course)
     }
     catch (e) {
@@ -80,81 +63,49 @@ router.get('/createTest:id', auth, async (req, res) => {
     }
 })
 
-
+//create test data handling
 router.post('/createTest:id', auth, async (req, res) => {
-    if (!req.user.name)
-        return res.status(400).send('please login or create account')
-    if (req.user.role != 'teacher')
-        return res.status(500).send("you are not TEACHER, Sorry")
     try {
+        isLogedIn(req, 'teacher');
         const course = await Course.findById(req.params.id.replace(":", ""));
-        if (req.body.type.includes('test')&&!course.tests[req.body.type])
-            return res.send('Test is not scheduled');
+        isTestScheduled(req, course);
         course.questions[req.body.type] = req.body;
         await course.save();
-        req.user.xp += 25;
-        if (req.user.xp >= 100) {
-            req.user.level += parseInt(req.user.xp / 100);
-            req.user.xp = req.user.xp % 100;
-        }
+        xpUpdate(req.user, XP_FOR_CREATE_TEST);
         await req.user.save();
-        res.redirect('/viewMyCourses')
-
+        res.redirect('/viewMyCourses');
     }
     catch (e) {
-        res.status(400).send("error " + e)
+        res.status(400).send("Bad Request, " + e)
     }
 })
 
-//students list yet to update
+//students list 
 router.get('/studentsList:id', auth, async (req, res) => {
-    if (!req.user.name)
-        return res.status(400).send('please login or create account')
-    if (req.user.role != 'teacher' && req.user.role != 'admin')
-        return res.status(500).send("you are not TEACHER, Sorry")
     try {
-        //get students list as students
-        let students = [];
-        let studentsInCourse = await Course.findById(req.params.id.replace(":", ""), { _id: 0, students: 1 });
-        const courseName = await Course.findById(req.params.id.replace(":", ""), { _id: 0, name: 1 });
-        studentsInCourse = studentsInCourse.students;
-        var bar = new Promise((resolve, reject) => {
-            studentsInCourse.forEach(async (data, index, studentsInCourse) => {
-                let tempStudent = await User.findById(data.studentId);
-                tempStudent.marks = data.marks;
-                tempStudent.testAttempt = data.testAttempt;
-                tempStudent.course = courseName.name;
-                students.push(tempStudent);
-                if (index === studentsInCourse.length - 1) resolve()
-            })
-        });
-        if (studentsInCourse.length > 0)
-            await bar;
+        isLogedIn(req, 'teacher');
+        const students = await studentsList(req);
         res.render('studentsList', { students })
     }
     catch (e) {
-        res.status(400).send("error " + e)
+        res.status(400).send("Bad Request, " + e)
     }
 })
 
+//leave course from teaching
 router.get('/leaveCourse:id', auth, async (req, res) => {
-    if (!req.user.name)
-        return res.status(400).send('please login or create account')
-    if (req.user.role != 'teacher' && req.user.role != 'admin')
-        return res.status(500).send("you are not TEACHER, Sorry")
     try {
+        isLogedIn(req, 'teacher');
         const course = await Course.findById(req.params.id.replace(":", ""));
         course.teacher = null;
         req.user.courseCount -= 1;
         await req.user.save();
         await course.save();
         res.redirect('/viewMyCourses')
-
     }
     catch (error) {
-        res.status(400).send("error " + error)
+        res.status(400).send("Bad Request, " + error)
     }
-
 })
 
 module.exports = router;

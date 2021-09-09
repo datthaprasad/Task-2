@@ -214,12 +214,47 @@
     {{#each courses}}
     <div class="card">
         <h2 style="background-color: chartreuse;">Course Name={{this.name}}</h2>
-        <p class="title">Duration: {{this.duration}}</p>
-        <p>Completed : {{this.completedDuration}}</p>
+        <p class="title">Duration: {{this.hours}}</p>
+        <p>Completed : {{this.completedHours}}</p>
         <p>Rating: {{this.rating}}</p>
+        <hr>
         <p>Module 1 Test is on {{tests.test1}}</p>
         <p>Module 2 Test is on {{tests.test2}}</p>
         <p>Module 3 Test is on {{tests.test3}}</p>
+        <hr>
+            <h2>Test Questions</h2>
+            {{#if questions.test1}}
+                <p>module 1 test is submitted</p>
+            {{else}}
+                <p style="color: #f44336;">module 1 test is not submitted</p>
+            {{/if}}
+            {{#if questions.test2}}
+                <p>module 2 test is submitted</p>
+            {{else}}
+                <p style="color: #f44336;">module 2 test is not submitted</p>
+            {{/if}}
+            {{#if questions.test3}}
+                <p>module 3 test is submitted</p>
+             {{else}}
+                <p style="color: #f44336;">module 3 test is not submitted</p>    
+            {{/if}}
+            <hr>
+            <h2>Assignment Questions</h2>
+            {{#if questions.assignment1}}
+                <p>1st assignment is submitted</p>
+            {{else}}
+                <p style="color: #f44336;">1st assignment is not submitted</p>
+            {{/if}}
+            {{#if questions.assignment2}}
+                <p>2nd assignment is submitted</p>
+            {{else}}
+                <p style="color: #f44336;">2nd assignment is not submitted</p>    
+            {{/if}}
+            {{#if questions.assignment3}}
+                <p>3rd assignment is submitted</p>
+            {{else}}
+                <p style="color: #f44336;">3rd assignment is not submitted</p>
+            {{/if}}
         <div style=" width: 100%;
                             float: left;
                             border: solid 1px blue;
@@ -245,12 +280,12 @@
                 <br><br>
                 <button style="text-align: center;background-color:blue;border-radius:50px;margin-bottom:auto"
                     type="submit">Pick a date to schedule/reschedule test</button>
-
             </form>
         </div>
         <br><br><br><br><br><br><br>
 
     </div>
+    <br><br><br><br>
     {{/each}}
     {{else}}
     <h1 style="background-color: red;text-align:center">EMPTY LIST !!!...</h1>

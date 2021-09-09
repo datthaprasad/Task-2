@@ -12,7 +12,16 @@
         <p>phone : {{phone}}</p>
         <p>email : {{email}}</p>
         <div style="padding:8px;border:5px solid green;width:max-content;margin-left:45.5%;">
-            <h4>Test taken {{testAttempt}} times</h4>
+            {{#if completed}}
+                <h2>Completed Course successfully.</h2>
+            {{else}}
+                {{#if testCompleted}}
+                    <h2>Assignments are still pending</h2>
+                {{/if}}
+                {{#if assignmentCompleted}}
+                    <h2>Tests are not completed</h2>
+                {{/if}}
+            {{/if}}
             <h4>Marks scored {{marks}}</h4>
         </div>
         <br><br>

@@ -9,7 +9,7 @@ const courseSchema = new mongoose.Schema({
         required: true
     },
     duration: {
-        type: String,
+        type: Number,
         required: true
     },
     rating: {
@@ -24,8 +24,8 @@ const courseSchema = new mongoose.Schema({
         ref: User
     },
     completedDuration: {
-        default: "00.00",
-        type: String
+        default: 0,
+        type: Number
     },
     tests: {
         test1: {
@@ -109,6 +109,7 @@ const courseSchema = new mongoose.Schema({
         }
     }]
 })
+
 
 
 const Course = mongoose.model('Course', courseSchema);
